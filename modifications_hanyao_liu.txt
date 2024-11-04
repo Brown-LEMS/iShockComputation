@@ -1,0 +1,265 @@
+Content: 
+modifications in shock computation package
+
+Modified files: 
+1)compute_ishock_main.cpp;
+2)dbsk2d_compute_ishock_process.cpp; 
+3)dbsol_file_io.cxx
+
+Modifications & Related bugs:
+1)several typos; 
+2)unchanged noise on different iterations; 
+3)input bounding box duplication; 
+4)missing part of line-fitting to closed contours; 
+5)left-over code related to local bounding box;
+
+Other modification:
+6) double the noise after all iterations using previous noise radius fail. (try 2x and 4x noise_radius for the same number of iterations as designated by the user.) 
+
+Future work:
+1)Prevent the generation of NaN points;
+2)More clean-up of left over code & input parameter setting;
+
+Written by: Hanyao Liu
+Date: 9/27/2018
+
+Modifications & Related bug details:
+1) several typos:
+1. dbsk2d_compute_ishock_process.cpp::execute():L266
+// typo
+// original
+                        boundary->add_a_polyline(fit_lines_5to_contour(polyline, rms));
+// modified         
+                        boundary->add_a_polyline(fit_lines_to_contour(polyline, rms));  
+
+2. dbsol_file_io.cxx:L302
+// typo: an extra blankspace
+// original
+    while (strncmp(lineBuffer, "[END CONTOUR]", sizeof(" [END CONTOUR]")-1)) {
+// modified
+    while (strncmp(lineBuffer, "[END CONTOUR]", sizeof("[END CONTOUR]")-1)) {
+
+
+
+2)randomize noise on different iterations:
+1. dbsk2d_compute_ishock_process.cpp::add_noise_to_contour(vsol_polygon_2d_sptr, double):L711~712
+// original
+// should be deleted
+    vnl_random mz_random;
+    mz_random.reseed((unsigned long)time(NULL));
+
+2. dbsk2d_compute_ishock_process.cpp::add_noise_to_contour(vsol_polyline_2d_sptr, double):L731~732
+// original
+// should be deleted
+    vnl_random mz_random;
+    mz_random.reseed((unsigned long)time(NULL)); 
+
+3. dbsk2d_compute_ishock_process.h
+// modified
+// should be added 
+# include <vnl/vnl_random.h>
+
+// should be added as a public member of dbsd2d_compute_ishock_process class
+
+vnl_random mz_random;
+
+4. dbsk2d_compute_ishock_process.cpp::dbsk2d_compute_ishock_process()
+// modified
+// should be added as the first statement of the constructor function
+mz_random.reseed((unsigned long)time(0));
+
+3)input bounding box duplication:
+1. compute_ishock_main.cpp::main():L242~243
+// original
+            shock_pro.add_input(inp);
+            shock_pro.add_input(vsol_contour_storage);
+// modified
+// insert the process of recalling load_pro_cem, thus re-construct the vsol_contour_storage variable 
+// to prevent image bounding box duplication
+            shock_pro.add_input(inp);
+            vidpro1_load_cem_process load_pro_cem;
+
+            bpro1_filepath input(input_vsol_fn, input_contour_extension);
+
+            load_pro_cem.parameters()->set_value("-ceminput", input);
+
+            load_pro_cem.clear_input();
+            load_pro_cem.clear_output();
+
+            bool load_cem_status = load_pro_cem.execute();
+            load_pro_cem.finish();
+
+            if (load_cem_status) {
+                vsol_contour = load_pro_cem.get_output();
+            }
+
+            load_pro_cem.clear_input();
+            load_pro_cem.clear_output();
+
+            vcl_cout << input_vsol_fn << " loaded." << vcl_endl;
+            vidpro1_vsol2D_storage_sptr vsol_contour_storage = vidpro1_vsol2D_storage_new();
+            vsol_contour_storage.vertical_cast(vsol_contour[0]);
+            shock_pro.add_input(vsol_contour_storage);
+
+4)missing part of line-fitting to closed contours:
+1. dbsk2d_compute_ishock_process.cpp::execute():L303~305
+// original
+                else if (bnoise_contour)
+                    boundary->add_a_polygon(add_noise_to_contour(
+                            vsol_list[b]->cast_to_region()->cast_to_polygon(), noise_radius));
+// modified
+                 else if (bnoise_contour){
+                    vsol_polygon_2d_sptr polygon =add_noise_to_contour(vsol_list[b]->cast_to_region()->cast_to_polygon(), noise_radius);
+                     if (bfit_lines){
+                        boundary->add_a_polygon(fit_lines_to_contour(polygon, rms));
+                     }
+                } 
+
+
+
+
+5)left-over code related to local bounding box:
+1. dbsk2d_compute_ishock_process.cpp::dbsk2d_compute_ishock_process()
+// parameters initialization related to the local bounding box 
+// should be deleted
+            !parameters()->add( "Use Existing Ids" , "-exist_ids" , bool(false) ) ||
+            !parameters()->add( "Grow Bounding Box" , "-b_growbbox" , bool(false) ) ||
+            !parameters()->add( "Min x: " , "-bbox_minx" , (double)0.0 ) ||
+            !parameters()->add( "Min y: " , "-bbox_miny" , (double)0.0 ) ||
+            !parameters()->add( "Max x: " , "-bbox_maxx" , (double)0.0 ) ||
+            !parameters()->add( "Max y: " , "-bbox_maxy" , (double)0.0 ) ||
+// future work
+// need to check for other code left over related to the local bounding box and delete corresponding parameters in the input xml file
+
+2. compute_ishock_main.cpp::main():L129~L174
+// original
+// local bounding box related code, should be deleted
+    if (params->add_bbox_()) {
+        vcl_cout << "************  Compute  Bbox  *************" << vcl_endl;
+
+        // Grab the underlying contours
+        vidpro1_vsol2D_storage_sptr vsol_contour_storage;
+        vsol_contour_storage.vertical_cast(vsol_contour[0]);
+
+        // create new bounding box
+        vsol_box_2d_sptr bbox = new vsol_box_2d();
+
+        // Determine largest bounding box
+        vcl_vector <vsol_spatial_object_2d_sptr> vsol_list =
+                vsol_contour_storage->all_data();
+
+        for (unsigned int b = 0; b < vsol_list.size(); b++) {
+            bbox->grow_minmax_bounds(vsol_list[b]->get_bounding_box());
+        }
+        vcl_cout << bbox->get_min_x() << vcl_endl;
+        vcl_cout << bbox->get_min_y() << vcl_endl;
+
+        // Enlarge bounding box from size
+        // Calculate xcenter, ycenter
+        double xcenter = bbox->width() / 2.0;
+        double ycenter = bbox->height() / 2.0;
+
+        // Translate to center and scale
+        double xmin_scaled = ((bbox->get_min_x() - xcenter) * 2) + xcenter;
+        double ymin_scaled = ((bbox->get_min_y() - ycenter) * 2) + ycenter;
+        double xmax_scaled = ((bbox->get_max_x() - xcenter) * 2) + xcenter;
+        double ymax_scaled = ((bbox->get_max_y() - ycenter) * 2) + ycenter;
+
+        bbox->add_point(xmin_scaled, ymin_scaled);
+        bbox->add_point(xmax_scaled, ymax_scaled);
+
+        vcl_cout << "bbox (minx, miny) (maxx, maxy) (width, height): "
+                 << "(" << bbox->get_min_x() << ", " << bbox->get_min_y()
+                 << ") (" << bbox->get_max_x() << ", " << bbox->get_max_y()
+                 << ") ("
+                 << bbox->width() << ", "
+                 << bbox->height() << ")" << vcl_endl;
+
+        // Add to vidpro storage this new bounding box
+        vsol_polygon_2d_sptr box_poly = bsol_algs::poly_from_box(bbox);
+        vsol_contour_storage->add_object(box_poly->cast_to_spatial_object());
+	    box_poly->print(vcl_cout);
+    }
+
+
+Other modification:
+6) double the noise after all iterations using previous noise radius fail. (try 2x and 4x noise_radius for the same number of iterations as designated by the user.) 
+1. compute_ishock_main.cpp::main():L180
+// modified
+// add the following code
+        float noise_radius = false;
+        shock_pro.parameters()->get_value("-noise_radius", noise_radius);
+
+2. compute_ishock_main.cpp::main():L188
+// original
+        for (; i < num_iterations; ++i) {
+// modified
+        for (; i < 3*num_iterations; ++i) {
+
+3. compute_ishock_main.cpp::main():L220
+// modified
+// add the following code
+            // double the noise 
+            if(i>=num_iterations and i<2*num_iterations)
+            {
+                shock_pro.parameters()->set_value("-noise_radius", 2*noise_radius);
+            }
+            
+            // four times the original noise level
+            if(i>=2*num_iterations and i<3*num_iterations)
+            {
+                shock_pro.parameters()->set_value("-noise_radius", 4*noise_radius);
+            }
+
+
+Future work details:
+1)Prevent the generation of NaN points:
+// NaN points are sometimes generated on preprocessing step 3.2
+// 3.2 Merge end-vertices into lines close to it
+// need to work on this following function
+// scenario:
+// This function turn the length of an edge to zero when it finds only one edge has distance below threshold with the current vertex v, and assign x,y of one of the endpoints of this edge e which is more close to v to be v's new x,y coordinates.
+// But there is alreay an edge between these two vertices, so this change of coordinates turn the edge length to zero.
+// Later, the edge length becomes divisor, generating NaN points.
+
+1. dbsk2d_bnd_preprocess_common.cxx::dissolve_vertices_into_curves(,,,):L406
+// original
+          if ( d > dbsk2d_bnd_preprocess::distance_tol)
+          {
+            weak_link_curves.push_back(e);
+            continue;
+          }
+// add the patch code after L410
+// When these two points are on the same edge, possible solutions include:
+// 1. add noise along the direction of the edge instead of moving the current vertex.
+// 2. directly merge the points instead of moving the current vertex
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

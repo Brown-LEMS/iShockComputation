@@ -1,0 +1,7 @@
+generate_top.m: using original cemv file to generate their top xxx contours part
+
+show_osf.py: visualize osf file
+
+total_edge.m: total number of edges in cemv file
+
+Other useful files include cem-to-cemv converter, cemv visualizer, etc.
