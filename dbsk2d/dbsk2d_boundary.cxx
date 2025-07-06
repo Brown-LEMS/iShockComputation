@@ -1192,13 +1192,13 @@ add_a_polyline(const vsol_polyline_2d_sptr & polyline, bool preproc_needed)
   vcl_vector<vgl_point_2d<double > > pts;
   pts.reserve(polyline->size());
 
-	vcl_ofstream out("points.txt", vcl_ios::app);
-	for (unsigned int i = 0; i < polyline->size(); i++) {
-		pts.push_back(polyline->vertex(i)->get_p());
-		out << polyline->vertex(i)->get_p().x() << " " << polyline->vertex(i)->get_p().y() << vcl_endl;
-	}
-	out << vcl_endl;
-	out.close();
+  //vcl_ofstream out("points.txt", vcl_ios::app);
+  for (unsigned int i = 0; i < polyline->size(); i++) {
+      pts.push_back(polyline->vertex(i)->get_p());
+		//out << polyline->vertex(i)->get_p().x() << " " << polyline->vertex(i)->get_p().y() << vcl_endl;
+  }
+//	out << vcl_endl;
+//	out.close();
     
   return this->add_connected_lines(pts, false, preproc_needed);
 }

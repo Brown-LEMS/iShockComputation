@@ -39,9 +39,9 @@
 class dbgl_arc : public dbgl_arc_base
 {
  public:
-    static const double near_zero_value
+    static constexpr double near_zero_value
       VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0e-8);
-    static const double minimum_curvature
+    static constexpr double minimum_curvature
       VCL_STATIC_CONST_INIT_FLOAT_DECL(0.00260416);  //(1/384.0)
 
 

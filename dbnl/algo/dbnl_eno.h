@@ -38,9 +38,9 @@ public:
 #define DBNL_ENO_DATA_LENGTH (DBNL_ENO_MAX_ORDER + 2)
 //: Maximum number of zero crossings in an interval.
 // A shock interval has 2 polys, and, hence, twice the number of max roots
-   static const double near_zero_value
+   static constexpr double near_zero_value
       VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0e-8);
-   static const double interval_tolerance
+   static constexpr double interval_tolerance
       VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0e-8);
 };
 

@@ -4,7 +4,7 @@
 // \file
 
 #include "bpro1_storage.h"
-
+#include <vcl_iostream.h>
 
 //: Destructor
 bpro1_storage::~bpro1_storage()

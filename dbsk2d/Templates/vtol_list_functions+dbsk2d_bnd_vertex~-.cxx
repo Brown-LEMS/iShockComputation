@@ -3,9 +3,9 @@
 #include "../dbsk2d_bnd_vertex.h"
 #include "../dbsk2d_bnd_vertex_sptr.h"
 
-#include <vtol/vtol_list_functions.txx>
-#include <vcl_vector.txx>
-#include <vcl_list.txx>
+#include <vtol/vtol_list_functions.hxx>
+#include <vcl_vector.h>
+#include <vcl_list.h>
 
 template vcl_vector<dbsk2d_bnd_vertex* >* tagged_union(vcl_vector<dbsk2d_bnd_vertex*>*);
 

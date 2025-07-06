@@ -118,8 +118,8 @@ SET(SOURCE_FILES
         dbsk2d/algo/dbsk2d_ishock_gap_detector.h
         dbsk2d/algo/dbsk2d_ishock_gap_transform.cxx
         dbsk2d/algo/dbsk2d_ishock_gap_transform.h
-        dbsk2d/algo/dbsk2d_ishock_grouping_transform.cxx
-        dbsk2d/algo/dbsk2d_ishock_grouping_transform.h
+        # dbsk2d/algo/dbsk2d_ishock_grouping_transform.cxx
+        # dbsk2d/algo/dbsk2d_ishock_grouping_transform.h
         dbsk2d/algo/dbsk2d_sample_ishock.cxx
         dbsk2d/algo/dbsk2d_sample_ishock.h
         dbsk2d/algo/dbsk2d_bnd_preprocess_arcs.cxx
