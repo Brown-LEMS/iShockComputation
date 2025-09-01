@@ -1,0 +1,10 @@
+# build dirs
+build*/
+debug*/
+
+# caches
+.cache*/
+
+# cmake intermeds
+CMakeFiles/
+CMakeCache.txt
