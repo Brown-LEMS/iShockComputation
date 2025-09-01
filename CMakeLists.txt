@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 2.8)
 project(dbsk2d_ishock_computation)
 
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+
 FIND_PACKAGE( VXL )
 
 IF( VXL_FOUND )
@@ -25,8 +30,8 @@ ENDIF( VXL_BRL_FOUND )
 
 SET(SOURCE_FILES
 
-        
-        
+
+
         dbsk2d_compute_ishock_process.cpp
         dbsk2d_compute_ishock_process.h
 
