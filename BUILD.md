@@ -33,5 +33,5 @@ note: I did have to manually modify some of the VXL src to get it to compile pro
 
 ### Building Shock
 
-`cmake .. -DCMAKE_PREFIX_PATH=/path/to/vxl-1.18.0/build`
-^ note: or wherever it lives on your machine
+`cmake .. -DCMAKE_PREFIX_PATH=/path/to/vxl/build`
+^ note: or wherever it lives on your machine, necessary for linking to vxl
