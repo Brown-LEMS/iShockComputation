@@ -7,7 +7,7 @@
 `mkdir build && cd build`
 
 ```
-cmake .. \
+cmake .. \        
   -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_CONTRIB=ON \
   -DBUILD_TESTING=OFF \
@@ -18,14 +18,20 @@ cmake .. \
   -DBUILD_DOCUMENTATION=OFF \
   -DBUILD_EXAMPLES=OFF \
   -DBUILD_FOR_VXL_DASHBOARD=OFF \
-  -DBUILD_PRIP=OFF \
-  -DCMAKE_CXX_STANDARD=98
+  -DCMAKE_CXX_STANDARD=98 \
+  -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
 
 ```
+^ note: environment config for building VXL 1.18.0 on Linux with modern clang/clang++ v20.1.8
 
-`make -k`
+
+`make -k -j$(nproc)` 
+^ note: `-k` -> to continue even where some targets fail to build
+^ note: `-j$(nproc)` -> utiilize all cores cuz compilation takes forever, full build will fail but it builds what we need
+
+note: I did have to manually modify some of the VXL src to get it to compile properly (no functionality changes)
 
 ### Building Shock
 
-`cmake .. -DCMAKE_PREFIX_PATH=/home/zmahan/libraries_src/vxl-1.18.0/build`
+`cmake .. -DCMAKE_PREFIX_PATH=/path/to/vxl-1.18.0/build`
 ^ note: or wherever it lives on your machine
