@@ -1,5 +1,6 @@
 # dbsk2d-ishock-computation
-- view `BUILD.md` for updated build instructions 
+- view [TODO.md](TODO.md) for the agenda in the `restruct` branch
+- view [BUILD.md](BUILD.md) for updated build instructions 
 - the following instructions (steps 0 - 2 are not up-to-date)
 This is the package for intrinsic shock computation, extracted from Maruthi's version in lemsvxl.
 We remove the dependencies on other parts of lemsvxl, and make VXL be its only dependency.
