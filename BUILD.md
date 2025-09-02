@@ -6,6 +6,12 @@
 
 - `mkdir build && cd build`
 
+- Required for building contrib package in VXL:
+    - Fedora: `sudo dnf install libgeotiff-devel`
+    - Ubuntu/Debian: `sudo apt install libgeotiff-dev`
+    - Arch: `sudo pacman -S libgeotiff`
+    - MacOS: `brew install libgeotiff`
+
 ```
 cmake .. \        
   -DCMAKE_BUILD_TYPE=Release \
