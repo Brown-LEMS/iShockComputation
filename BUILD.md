@@ -35,3 +35,4 @@ note: I did have to manually modify some of the VXL src to get it to compile pro
 
 `cmake .. -DCMAKE_PREFIX_PATH=/path/to/vxl/build`
 ^ note: or wherever it lives on your machine, necessary for linking to vxl
+`make -j$(nproc)` or `make`
