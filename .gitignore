@@ -8,3 +8,6 @@ debug*/
 # cmake intermeds
 CMakeFiles/
 CMakeCache.txt
+
+# output
+output*
