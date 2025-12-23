@@ -241,3 +241,4 @@ That is, if there is `vnl_math::foo()` in old version, use `foo()` instead. If t
 variables like `vnl_math::pi`, just keep them the same.
 
 foobar
+testing cred
