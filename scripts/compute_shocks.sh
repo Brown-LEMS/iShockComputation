@@ -3,7 +3,7 @@
 input_object=`basename $1 | cut -d"." -f1`
 input_folder=`dirname $1`
 
-out_name=`echo $1 | sed s/png/esf/g`
+out_name=`echo $1 | sed s/\.jpg/_se_tcg.esf/g`
 val=`ls $out_name`
 
 if [ ! -z $val ]
@@ -27,14 +27,15 @@ echo $input_folder | sed 's/\//\\\//g' > $temp1
 var=`cat $temp1`
 
 
-sed 's/input_object_dir=\"\"/input_object_dir="'$var$'"/' /Volumes/Samsung_T5/work/iShock/base/input_defaults_shocks.xml > $temp3
-sed 's/input_object_name=\"\"/input_object_name="'$input_object'"/' $temp3 > $input_filename_shocks
+sed 's/input_object_dir=\"\"/input_object_dir="'$var$'"/' /users/mnarayan/shock_compute/base/input_defaults_shocks.xml > $temp3
+sed 's/output_shock_folder=\"\"/output_shock_folder="'$var$'"/' $temp3 > $temp4
+sed 's/input_object_name=\"\"/input_object_name="'$input_object'"/' $temp4 > $input_filename_shocks
 
-/Volumes/Samsung_T5/work/iShock/bin/dbsk2d_ishock_esf_computation -x $input_filename_shocks
+/users/mnarayan/shock_compute/base/dbsk2d_ishock_esf_computation -x $input_filename_shocks
 
 rm -f $temp1
 rm -f $temp2
 rm -f $temp3
 rm -f $temp4
-rm -f $input_filename_shocks
+#rm -f $input_filename_shocks
 

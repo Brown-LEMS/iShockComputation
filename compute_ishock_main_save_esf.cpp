@@ -323,7 +323,7 @@ int main(int argc, char *argv[]) {
     dbsk2d_save_esf_process save_sg_pro;
     
     vcl_string output_file;
-    output_file = params->input_object_dir_() + "/";
+    output_file = params->output_shock_folder_() + "/";
     
     if (!vul_file::exists(output_file)) 
     {
