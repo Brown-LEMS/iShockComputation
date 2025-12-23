@@ -242,3 +242,4 @@ variables like `vnl_math::pi`, just keep them the same.
 
 foobar
 testing cred
+slowly 
