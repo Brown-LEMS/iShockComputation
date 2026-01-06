@@ -9,10 +9,10 @@ The code has been tested on Brown University Oscars CCV server (Linux Red Hat).
 Once VXL is ready, follow the standard build process to build the shock graph code:
 ```
 mkdir build && cd build
-ccmake -DVXL_DIR=/path/to/your/vxl-1.18.0-patch/built/folder
+cmake .. -DVXL_DIR=/path/to/your/vxl-1.18.0-patch/built/folder
 make -j{nproc}
 ```
-where `/path/to/your/vxl-1.18.0-patch/built/folder` is the directory where your vxl-1.18.0-patch is built. Note that `{nproc}` can be any integer dependening on the number of (CPU) cores in use, but it is recommended to use no more than 2 to avoid compilation conflict from parallel threads.
+where `/path/to/your/vxl-1.18.0-patch/built/folder` is the directory where your vxl-1.18.0-patch is built. Alternatively, use `ccmake ..` to specify your vxl built folder. Note that `{nproc}` can be any integer dependening on the number of (CPU) cores in use, but it is recommended to use no more than 2 to avoid compilation conflict from parallel threads.
 
 ## Usage
 ### Toy Example
