@@ -303,7 +303,7 @@ int main(int argc, char *argv[]) {
     vul_file::make_directory(output_file);
   }
 
-  output_file = params->input_object_name_() + params->output_extension_();
+  output_file += params->input_object_name_() + params->output_extension_();
 
   bpro1_filepath output(output_file, params->output_extension_());
 
