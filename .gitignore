@@ -12,3 +12,6 @@ CMakeCache.txt
 # output
 output*
 params.xml
+
+# valgrind
+vgcore*
