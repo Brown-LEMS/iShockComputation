@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.6)
 project(dbsk2d_ishock_computation)
 
 
@@ -25,8 +25,8 @@ ENDIF( VXL_BRL_FOUND )
 
 SET(SOURCE_FILES
 
-        
-        
+
+
         dbsk2d_compute_ishock_process.cpp
         dbsk2d_compute_ishock_process.h
 
