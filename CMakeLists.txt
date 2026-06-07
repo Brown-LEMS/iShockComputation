@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.6)
 project(dbsk2d_ishock_computation)
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 FIND_PACKAGE( VXL )
 
